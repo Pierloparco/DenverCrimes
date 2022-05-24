@@ -79,14 +79,15 @@ public class Model {
 			return;
 		}
 		
-		// scorro i vicini dell'ultimo inserito e provo le varie "strade";
-		for(String v : Graphs.neighborListOf(this.grafo, parziale.get(parziale.size()-1))); {	// prendo il grafo, e l'ultimo inserito
+		// scorro i vicini dell'ultimo inserito e provo le varie "strade"; Prendo il grafo, e l'ultimo inserito
+		for(String v : Graphs.neighborListOf(this.grafo, parziale.get(parziale.size()-1))) {
 			if(!parziale.contains(v)) {
 				parziale.add(v);
-				cerca(parziale, destinazione);
+				cerca(parziale,destinazione);
 				parziale.remove(parziale.size()-1);
 			}
-		}	
+		}
+		
 	}
 	
 }
