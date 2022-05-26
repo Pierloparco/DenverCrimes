@@ -110,4 +110,29 @@ public class EventsDao {
 		return archi;
 	}
 
+	public List<String> getCategorie() {
+		String sql = "SELECT DISTINCT offense_category_id "
+					+"FROM events ";
+		
+		List<String> categorie = new ArrayList<>();
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			ResultSet res = st.executeQuery();
+			
+			while(res.next()) {
+				categorie.add(res.getString("offense_category_id"));
+			}
+			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	
+		return categorie;
+	}
+
 }

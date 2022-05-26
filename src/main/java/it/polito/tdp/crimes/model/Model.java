@@ -13,15 +13,18 @@ import it.polito.tdp.crimes.db.EventsDao;
 
 public class Model {
 	
-	private Graph<String, DefaultWeightedEdge> grafo;
+	private Graph<String, DefaultWeightedEdge> grafo; // grafo semplice pesato non orientato, con i vertici che sono i tipi di reato (offense_type_id)
 	private EventsDao dao;
 	
 	private List<String> best;
 	
+	// settiamo il dao = new EventsDAO();
 	public Model() {
 		dao = new EventsDao();
 	}
 	
+	// creo il grafo semplice pesato non orientato dove gli passo la categoria di reato che è una stringa ed il mese
+	// che mi servono per costruire il grafo;
 	public void creaGrafo(String categoria, int mese) {
 		grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 		
@@ -32,11 +35,31 @@ public class Model {
 		for(Adiacenza a : dao.getArchi(categoria, mese)) {
 			Graphs.addEdgeWithVertices(this.grafo, a.getV1(), a.getV2(), a.getPeso());
 		}
+	}
 		
-		// TODO riempire la tendina degli archi !
-		System.out.println("Grafo creato!");
-		System.out.println("# VERTICI: "+this.grafo.vertexSet().size());
-		System.out.println("# ARCHI: " +this.grafo.edgeSet().size());
+//		// TODO riempire la tendina degli archi !
+//		System.out.println("Grafo creato!");
+//		System.out.println("# VERTICI: "+this.grafo.vertexSet().size());
+//		System.out.println("# ARCHI: " +this.grafo.edgeSet().size());
+	
+	public int nVertici() {
+		return this.grafo.vertexSet().size();
+	}
+	
+	public int nArchi() {
+		return this.grafo.edgeSet().size();
+	}
+	
+	public List<Adiacenza> getArchi() {
+		List<Adiacenza> archi = new ArrayList<Adiacenza>();
+		for(DefaultWeightedEdge e : this.grafo.edgeSet()) {
+			archi.add(new Adiacenza(this.grafo.getEdgeSource(e), this.grafo.getEdgeTarget(e), (int)this.grafo.getEdgeWeight(e)));
+		}
+		return archi;
+	}
+	
+	public List<String> getCategorie() {
+		return this.dao.getCategorie();
 	}
 	
 	public List<Adiacenza> getArchiMaggioriPesoMedio() {
@@ -89,5 +112,6 @@ public class Model {
 		}
 		
 	}
+
 	
 }
